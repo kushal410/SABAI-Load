@@ -1,0 +1,52 @@
+name: K6 Load Tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+jobs:
+  k6-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install k6
+        uses: grafana/setup-k6-action@v1
+
+      - name: Create results dir
+        run: mkdir -p results
+
+      - name: Run loadtest
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+          PHONE: ${{ secrets.PHONE }}
+          OTP: ${{ secrets.OTP }}
+        run: k6 run --out json=results/loadtest.json k6/scripts/loadtest.js || true
+
+      - name: Run stresstest
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+        run: k6 run --out json=results/stresstest.json k6/scripts/stresstest.js || true
+
+      - name: Run spiketest
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+        run: k6 run --out json=results/spiketest.json k6/scripts/spiketest.js || true
+
+      # ✅ Optional: compress to reduce size (VERY IMPORTANT)
+      - name: Compress results
+        run: zip -r results.zip results/
+
+      - name: Upload results artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-results
+          path: results.zip   # 👈 upload zip instead of folder
+          retention-days: 1   # 👈 BEST VALUE (was 2 → now 1)
+          overwrite: true     # 👈 prevents duplicate storage
