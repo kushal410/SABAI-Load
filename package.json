@@ -1,1 +1,1364 @@
-
+{
+  "info": {
+    "_postman_id": "d2726885-d904-46fd-a820-f112667faa42",
+    "name": "Sabai",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "45659025",
+    "_collection_link": "https://go.postman.co/collection/45659025-d2726885-d904-46fd-a820-f112667faa42?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "publicUser",
+      "item": [
+        {
+          "name": "Auth",
+          "item": [
+            {
+              "name": "SignUp",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if (pm.response.code === 200 || pm.response.code === 201) {",
+                      "  const jsonData = pm.response.json();",
+                      "",
+                      "  if (jsonData.access_token) {",
+                      "    pm.environment.set(\"authorization_token\", jsonData.access_token);",
+                      "    console.log(\"authorization_token saved:\", jsonData.access_token);",
+                      "  } else {",
+                      "    console.log(\"access_token not found in response:\", jsonData);",
+                      "  }",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"full_name\": \"Roshan Chaudhary\",\n  \"email\": \"roshan@example.com\",\n  \"phone\": \"9800000000\",\n  \"password\": \"roshan123\",\n  \"confirm_password\": \"roshan123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}auth/signup",
+                  "host": [
+                    "{{base_url}}auth"
+                  ],
+                  "path": [
+                    "signup"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "LoginIn",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if (pm.response.code === 200 || pm.response.code === 201) {",
+                      "  const jsonData = pm.response.json();",
+                      "",
+                      "  if (jsonData.access_token) {",
+                      "    pm.environment.set(\"authorization_token\", jsonData.access_token);",
+                      "    console.log(\"authorization_token saved:\", jsonData.access_token);",
+                      "  } else {",
+                      "    console.log(\"access_token not found in response:\", jsonData);",
+                      "  }",
+                      "",
+                      "  if (jsonData.refresh_token) {",
+                      "    pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+                      "    console.log(\"refresh_token saved:\", jsonData.refresh_token);",
+                      "  } else {",
+                      "    console.log(\"refresh_token not found in response:\", jsonData);",
+                      "  }",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"roshan@example.com\",\n  \"password\": \"roshan123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/auth/signin",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "signin"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "refresh token",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if (pm.response.code === 200 || pm.response.code === 201) {",
+                      "    try {",
+                      "        const jsonData = pm.response.json();",
+                      "",
+                      "        if (jsonData.access_token) {",
+                      "            pm.environment.set(\"authorization_token\", jsonData.access_token);",
+                      "            console.log(\"access_token saved:\", jsonData.access_token);",
+                      "        } else {",
+                      "            console.log(\"access_token not found in response\");",
+                      "        }",
+                      "",
+                      "        if (jsonData.refresh_token) {",
+                      "            pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+                      "            console.log(\"refresh_token saved:\", jsonData.refresh_token);",
+                      "        } else {",
+                      "            console.log(\"refresh_token not found in response\");",
+                      "        }",
+                      "    } catch (e) {",
+                      "        console.error(\"Error parsing JSON:\", e);",
+                      "    }",
+                      "} else {",
+                      "    console.log(\"Response code is not 200 or 201:\", pm.response.code);",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n      \"refresh_token\": \"{{refresh_token}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/auth/refresh",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "refresh"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "google",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if (pm.response.code === 200 || pm.response.code === 201) {",
+                      "  const jsonData = pm.response.json();",
+                      "",
+                      "  if (jsonData.access_token) {",
+                      "    pm.environment.set(\"authorization_token\", jsonData.access_token);",
+                      "    console.log(\"authorization_token saved:\", jsonData.access_token);",
+                      "  } else {",
+                      "    console.log(\"access_token not found in response:\", jsonData);",
+                      "  }",
+                      "",
+                      "  if (jsonData.refresh_token) {",
+                      "    pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+                      "    console.log(\"refresh_token saved:\", jsonData.refresh_token);",
+                      "  } else {",
+                      "    console.log(\"refresh_token not found in response:\", jsonData);",
+                      "  }",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\":\"roshan2021chaudhary@gmail.com\",\n    \"password\":\"roshan123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/auth/google",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "google"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Vendor",
+      "item": [
+        {
+          "name": "Auth",
+          "item": [
+            {
+              "name": "SignUp",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if (pm.response.code === 200 || pm.response.code === 201) {",
+                      "  const jsonData = pm.response.json();",
+                      "",
+                      "  if (jsonData.access_token) {",
+                      "    pm.environment.set(\"authorization_token\", jsonData.access_token);",
+                      "    console.log(\"authorization_token saved:\", jsonData.access_token);",
+                      "  } else {",
+                      "    console.log(\"access_token not found in response:\", jsonData);",
+                      "  }",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"full_name\": \"Roshan Chaudhary\",\n  \"email\": \"roshan2025@gmail.com\",\n  \"phone\": \"9821973432\",\n  \"password\": \"roshan123\",\n  \"confirm_password\":\"roshan123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/vendor/signup",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "vendor",
+                    "signup"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "LoginIn",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if (pm.response.code === 200 || pm.response.code === 201) {",
+                      "  const jsonData = pm.response.json();",
+                      "",
+                      "  if (jsonData.access_token) {",
+                      "    pm.environment.set(\"authorization_token\", jsonData.access_token);",
+                      "    console.log(\"authorization_token saved:\", jsonData.access_token);",
+                      "  } else {",
+                      "    console.log(\"access_token not found in response:\", jsonData);",
+                      "  }",
+                      "",
+                      "  if (jsonData.refresh_token) {",
+                      "    pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+                      "    console.log(\"refresh_token saved:\", jsonData.refresh_token);",
+                      "  } else {",
+                      "    console.log(\"refresh_token not found in response:\", jsonData);",
+                      "  }",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"roshan2025@gmail.com\",\n  \"password\": \"roshan123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/vendor/signin",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "vendor",
+                    "signin"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "refresh token",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if (pm.response.code === 200 || pm.response.code === 201) {",
+                      "    try {",
+                      "        const jsonData = pm.response.json();",
+                      "",
+                      "        if (jsonData.access_token) {",
+                      "            pm.environment.set(\"authorization_token\", jsonData.access_token);",
+                      "            console.log(\"access_token saved:\", jsonData.access_token);",
+                      "        } else {",
+                      "            console.log(\"access_token not found in response\");",
+                      "        }",
+                      "",
+                      "        if (jsonData.refresh_token) {",
+                      "            pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+                      "            console.log(\"refresh_token saved:\", jsonData.refresh_token);",
+                      "        } else {",
+                      "            console.log(\"refresh_token not found in response\");",
+                      "        }",
+                      "    } catch (e) {",
+                      "        console.error(\"Error parsing JSON:\", e);",
+                      "    }",
+                      "} else {",
+                      "    console.log(\"Response code is not 200 or 201:\", pm.response.code);",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n      \"refresh_token\": \"{{refresh_token}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/vendor/refresh",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "vendor",
+                    "refresh"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Profile",
+          "item": [
+            {
+              "name": "Update the Vendor Profile",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"phone\":\"9840635175\",\n    \"business_name\":\"Sabai Backend Developer\",\n    \"vendor_email\":\"vendor2022chaudhary@gmail.com\",\n    \"vendor_phone\":\"9840635175\",\n    \"website\":\"https://2klips.com/\",\n    \"description\":\"This is a 2klips Dating app powered by Sabai Developers\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/vendor/update-profile",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "vendor",
+                    "update-profile"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Profile",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/vendor-profile/get-info",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "vendor-profile",
+                    "get-info"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Offer",
+          "item": [
+            {
+              "name": "Create New Offer",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"category_id\": \"1\",\n  \"primary_location_id\": \"5\",\n  \"title\": \"Pokhara Paragliding Adventure\",\n  \"short_description\": \"Enjoy a thrilling paragliding experience in Pokhara.\",\n  \"description\": \"Experience breathtaking views of Pokhara valley, Phewa Lake, and the Himalayas with our professional paragliding team.\",\n  \"terms_and_conditions\": \"Booking must be confirmed 24 hours in advance. Weather conditions may affect flight schedule.\",\n  \"offer_type\": \"activity\",\n  \"booking_type\": \"instant\",\n  \"inventory_policy\": \"limited\",\n  \"location_type\": \"physical\",\n  \"currency\": \"USD\",\n  \"price_from\": 100,\n  \"price_to\": 150,\n  \"discount_percent\": 10,\n  \"original_price\": 170,\n  \"available_from\": \"2026-02-01T00:00:00.000Z\",\n  \"available_to\": \"2026-12-31T23:59:59.000Z\",\n  \"seo_title\": \"Best Paragliding in Pokhara\",\n  \"seo_description\": \"Book the best paragliding adventure in Pokhara at affordable prices.\",\n  \"tag_ids\": [\"1\", \"2\"]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/offer/create-new-offer",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "offer",
+                    "create-new-offer"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "superAdmin",
+      "item": [
+        {
+          "name": "Role",
+          "item": [
+            {
+              "name": "create role",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\":\" \",\n    \"code\":\" \"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/role/create-role",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "role",
+                    "create-role"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get All Roles",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/role/all",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "role",
+                    "all"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Auth",
+          "item": [
+            {
+              "name": "SignUp",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if (pm.response.code === 200 || pm.response.code === 201) {",
+                      "  const jsonData = pm.response.json();",
+                      "",
+                      "  if (jsonData.access_token) {",
+                      "    pm.environment.set(\"authorization_token\", jsonData.access_token);",
+                      "    console.log(\"authorization_token saved:\", jsonData.access_token);",
+                      "  } else {",
+                      "    console.log(\"access_token not found in response:\", jsonData);",
+                      "  }",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"full_name\": \"Roshan Chaudhary\",\n  \"email\": \"roshan2022chaudhary@gmail.com\",\n  \"phone\": \"9840635175\",\n  \"password\": \"roshan123\",\n  \"confirm_password\":\"roshan123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/Superadmin-auth/signup",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "Superadmin-auth",
+                    "signup"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "LoginIn",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if (pm.response.code === 200 || pm.response.code === 201) {",
+                      "  const jsonData = pm.response.json();",
+                      "",
+                      "  if (jsonData.access_token) {",
+                      "    pm.environment.set(\"authorization_token\", jsonData.access_token);",
+                      "    console.log(\"authorization_token saved:\", jsonData.access_token);",
+                      "  } else {",
+                      "    console.log(\"access_token not found in response:\", jsonData);",
+                      "  }",
+                      "",
+                      "  if (jsonData.refresh_token) {",
+                      "    pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+                      "    console.log(\"refresh_token saved:\", jsonData.refresh_token);",
+                      "  } else {",
+                      "    console.log(\"refresh_token not found in response:\", jsonData);",
+                      "  }",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"roshan2022chaudhary@gmail.com\",\n  \"password\": \"roshan123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/Superadmin-auth/signin",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "Superadmin-auth",
+                    "signin"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Refresh Token",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "if (pm.response.code === 200 || pm.response.code === 201) {",
+                      "    try {",
+                      "        const jsonData = pm.response.json();",
+                      "",
+                      "        if (jsonData.access_token) {",
+                      "            pm.environment.set(\"authorization_token\", jsonData.access_token);",
+                      "            console.log(\"access_token saved:\", jsonData.access_token);",
+                      "        } else {",
+                      "            console.log(\"access_token not found in response\");",
+                      "        }",
+                      "",
+                      "        if (jsonData.refresh_token) {",
+                      "            pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+                      "            console.log(\"refresh_token saved:\", jsonData.refresh_token);",
+                      "        } else {",
+                      "            console.log(\"refresh_token not found in response\");",
+                      "        }",
+                      "    } catch (e) {",
+                      "        console.error(\"Error parsing JSON:\", e);",
+                      "    }",
+                      "} else {",
+                      "    console.log(\"Response code is not 200 or 201:\", pm.response.code);",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n      \"refresh_token\": \"{{refresh_token}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/Superadmin-auth/signin",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "Superadmin-auth",
+                    "signin"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Category",
+          "item": [
+            {
+              "name": "Create a Category",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\":\"9840635175\",\n    \"icon\":\"Roshan-parbati-icon\",\n    \"seo_title\":\"Meet with the Love Birds\",\n    \"seo_description\":\"Get a Chance to meet with the love birds can get a life adive about Eternal Love form Roshan and Parbati\"\n\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/category/Create",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "category",
+                    "Create"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Category",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\":\"Offer Category\",\n    \"icon\":\"Roshan-parbati-icon\",\n    \"seo_title\":\"Meet with the Love Birds\",\n    \"seo_description\":\"Get a Chance to meet with the love birds can get a life adive about Eternal Love form Roshan and Parbati\"\n\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/category/update/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "category",
+                    "update",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get all category",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/category/get-all-category",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "category",
+                    "get-all-category"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Tag",
+          "item": [
+            {
+              "name": "Create a Tag",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\":\"New Year Special\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/tag/create-new",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "tag",
+                    "create-new"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update a Tag",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\":\"New Year Special 2026\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/tag/update/2",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "tag",
+                    "update",
+                    "2"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get All Tag",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/tag/get-all-tag",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "tag",
+                    "get-all-tag"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Location",
+      "item": [
+        {
+          "name": "UserLocation",
+          "item": [
+            {
+              "name": "Create User Location",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"label\": \"Home\",\n  \"is_default\": true,\n  \"location\": {\n    \"country\": \"Nepal\",\n    \"city\": \"Kathmandu\",\n    \"state\": \"Bagmati\",\n    \"address_line_1\": \"Baneshwor\",\n    \"address_line_2\": \"Near Sankhamul\",\n    \"postal_code\": \"44600\",\n    \"latitude\": \"27.6937000\",\n    \"longitude\": \"85.3420000\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/locations/users/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "locations",
+                    "users",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update User Location",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"label\": \"Office\",\n  \"is_default\": true,\n  \"location\": {\n    \"country\": \"Nepal\",\n    \"city\": \"Kathmandu\",\n    \"state\": \"Bagmati\",\n    \"address_line_1\": \"Baneshwor\",\n    \"address_line_2\": \"Near Sankhamul\",\n    \"postal_code\": \"44600\",\n    \"latitude\": \"27.6937000\",\n    \"longitude\": \"85.3420000\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/locations/users/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "locations",
+                    "users",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete User Location",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"label\": \"Office\",\n  \"is_default\": true,\n  \"location\": {\n    \"country\": \"Nepal\",\n    \"city\": \"Kathmandu\",\n    \"state\": \"Bagmati\",\n    \"address_line_1\": \"Baneshwor\",\n    \"address_line_2\": \"Near Sankhamul\",\n    \"postal_code\": \"44600\",\n    \"latitude\": \"27.6937000\",\n    \"longitude\": \"85.3420000\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/locations/users/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "locations",
+                    "users",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get User Location",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/locations/users/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "locations",
+                    "users",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Vendor Location",
+          "item": [
+            {
+              "name": "create vendor location",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Main Branch\",\n  \"location\": {\n    \"country\": \"Nepal\",\n    \"city\": \"Pokhara\",\n    \"state\": \"Gandaki\",\n    \"address_line_1\": \"Lakeside\",\n    \"postal_code\": \"33700\",\n    \"latitude\": \"28.2096000\",\n    \"longitude\": \"83.9856000\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/locations/vendors/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "locations",
+                    "vendors",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "delete vendor location",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/locations/vendors/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "locations",
+                    "vendors",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "updated vendor location",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"Main Branch\",\n  \"location\": {\n    \"country\": \"Nepal\",\n    \"city\": \"Pokhara Budhibazar\",\n    \"state\": \"Gandaki\",\n    \"address_line_1\": \"Lakeside\",\n    \"postal_code\": \"33700\",\n    \"latitude\": \"28.2096000\",\n    \"longitude\": \"83.9856000\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/locations/vendors/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "locations",
+                    "vendors",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "get vendor location",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{authorization_token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{base_url}}/locations/vendors/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "locations",
+                    "vendors",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
